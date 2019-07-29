@@ -17,4 +17,16 @@ class Book < ApplicationRecord
       where("name LIKE ?", "#{pattern}%")
     end
   end
+
+  def average_rate
+    book = Book.find_by id: id
+    rates = book.rates
+    size = rates.size
+    total = 0
+    rates.each do |rate|
+      total += rate.score
+    end
+    return total * 1.0 / size if size > 0
+    0
+  end
 end
