@@ -63,3 +63,8 @@ en:
   reviewed: "reviewed"
   posted: "posted"
   ago: "ago"
+  following: "following"
+  follow: "Follow"
+  unfollow: "Unfollow"
+  followers: "Followers"
+  user_not_found: "user not found"
