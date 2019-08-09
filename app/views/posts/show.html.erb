@@ -29,25 +29,19 @@
                   <% end %>
                 </div>
               </div>
-
-              <div class="last col-sm-12" id="metacol">
-                <h1 id="bookTitle" class="bookTitle">
-                  <%= link_to book.name, book_path(book) %>
-                </h1>
-                <div id="bookAuthors" class="stacked">
-                  <span class="by smallText">
-                    <% if book.authors.any? %>
-                      <small><%= t "by" %></small>
-                      <% book.authors.each do |author| %>
-                        <span><%= author.name %></span>
-                        <% unless author == book.authors.last %>,<% end %>
-                      <% end %>
-                    <% end %>
-                  </span>
-                </div>
-              </div>
             </div>
 
+            <h1 id="bookTitle" class="bookTitle">
+              <%= link_to book.name, book_path(book) %>
+            </h1>
+            <div id="imagecol" class="stacked">
+              <span class="by smallText">
+                <% if book.authors.any? %>
+                  <small><%= t "by" %></small>
+                  <%= book.authors.map(&:name).join(", ") %>
+                <% end %>
+              </span>
+            </div>
 
             <div class="review row post-content">
               <div class="reviewText stacked col-sm-12">
@@ -55,14 +49,17 @@
                   <span><%= post.content %></span>
                 </p>
 
-                <!-- edit and delete post -->
-                <!-- TODO -->
+                <% if user_signed_in? && (current_user.id == @post.user.id) %>
+                  <%= link_to t("edit"), edit_post_path(@post), class:"btn btn-success" %>
+                  <%= link_to t("delete"), post_path(@post), method: :delete,
+                    class:"btn btn-danger" %>
+                <% end %>
 
               </div>
 
 
               <input type="hidden" id="post-id" value="<%= @post.id %>">
-                <% if logged_in? %>
+                <% if user_signed_in? %>
                   <span class="like">
                     <% if like(@post).present? %>
                       <span class="btn icon-btn btn-info unlikeBtn
@@ -95,7 +92,7 @@
                     <% end %>
                   </span>
                 <% else %>
-                  <span class="like-login">
+                  <span class="like-login" data-url="<%= new_user_session_url %>">
                     <span class="btn icon-btn pmd-ripple-effect
                       pmd-btn-raised loginBtn">
                       <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
@@ -112,7 +109,7 @@
                 <% end %><br><br>
 
                 <h2>Comments</h2><hr>
-                <% if logged_in? %>
+                <% if user_signed_in? %>
                   <%= render "comments/form", post: @post,
                     comment: @support.new_comment %>
                   <div id="comments" class="comments-part">
@@ -121,7 +118,7 @@
                   </div>
                 <% else %>
                   <h3>
-                    <%= link_to t("login"), login_path,
+                    <%= link_to t("login"), new_user_session_path,
                     data: {turbolinks: false} %>
                     <%= t ".to_comment" %>
                   </h3><br>

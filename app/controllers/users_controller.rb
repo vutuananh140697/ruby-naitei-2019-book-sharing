@@ -1,4 +1,16 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user!, except: %i(new create)
+  before_action :load_user, except: %i(new create index)
+  before_action :correct_user, only: %i(edit update)
+
+  def index
+    @users = User.page(params[:page]).per Settings.paginate_user
+  end
+
+  def show
+    @posts = @user.posts.page(params[:page]).per Settings.paginate_post
+  end
+
   def new
     @user = User.new
   end
