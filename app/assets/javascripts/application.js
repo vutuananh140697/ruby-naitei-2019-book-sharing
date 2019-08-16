@@ -13,9 +13,10 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
-//= require rails-ujs
 //= require turbolinks
 //= require bootstrap
 //= require post
 //= require comment
 //= require rate
+//= require font_awesome5
+//= require_tree .
